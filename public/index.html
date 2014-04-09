@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <title>My AngularJS App</title>
+  <!-- for grunt watch livereload -->
+  <script src="//localhost:35729/livereload.js"></script>
+    <!-- Grunt generated bundles -->
+  <link href="bundle.css" rel="stylesheet">
+  <script src="bundle.js"></script>
+</head>
+
+<body ng-controller="MainCtrl">
+  <img ng-src="{{photoUrl}}"/>
+  <div ng-repeat="value in values">{{value}}</div>
+  <div drag-drop-file photo-url="photoUrl" style="width:100px; height: 100px; background:yellow;"></div>
+
+  <!-- Angular Templates -->
+<script type="text/ng-template" id="directives.dragDropFile.html">
+
+</script>
+
+</body>
+</html>

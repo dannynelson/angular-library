@@ -11,9 +11,10 @@
 </head>
 
 <body ng-controller="MainCtrl">
-  <img ng-src="{{photoUrl}}"/>
+  <img ng-src="{{photoUrl}}" style="width:100px; height: 100px;"/>
   <div ng-repeat="value in values">{{value}}</div>
-  <div drag-drop-file photo-url="photoUrl" style="width:100px; height: 100px; background:yellow;"></div>
+  <div click-file-upload="photoUrl" style="width:100px; height: 100px; background:yellow;"></div>
+  <input type="file" id="directives-click-file-upload"/>
 
   <!-- Angular Templates -->
   <!-- build:section templates --><!-- /build -->

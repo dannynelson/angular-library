@@ -1,6 +1,7 @@
 {
   "dist": "public",
   "vendor": [
+    "bower_components/jquery/dist/jquery.js",
     "bower_components/angular/angular.js",
     "bower_components/angular-resource/angular-resource.js",
     "bower_components/lodash/dist/lodash.js",
@@ -15,7 +16,7 @@
   "app": {
     "js": "client/{states,common}/**/!(*spec).js",
     "html": "client/{states,common}/**/*.html",
-    "less": "client/states/**/*.less"
+    "less": "client/{states,common}/**/*.less"
   },
   "test": [
     "client/{states,common}/**/*.spec.js"

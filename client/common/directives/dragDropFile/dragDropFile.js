@@ -1,12 +1,16 @@
 /**
  * @ngdoc directive
  * @name dragDropFile
- * @restrict E
+ * @restrict A
  *
  * @description
- * Add to a container to make it into a dynamic drag and drop a file upload area.
+ * Drag and drop a file over element to upload, and save to given variable.
  *
- * @param {string=} photoUrl Data URI in Base64 format created after file is dropped.
+ * @param {string=} dragDropFile Variable that will save dataURI (in Base64) once file uploaded.
+ *
+ * @example
+ * $scope.photoUrl = ''; // photo URI will be attached here
+ * <div drag-drop-file="photoUrl"></div>
  */
 
 angular.module('directives.dragDropFile', [])
@@ -16,20 +20,19 @@ angular.module('directives.dragDropFile', [])
     restrict: 'A',
     // templateUrl: 'directives.dragDropFile.html',
     scope: {
-      photoUrl: '=',
+      dragDropFile: '=',
     },
     link: function (scope, element, attrs) {
       var rawElement = element[0];
       rawElement.ondragover = function () {
-        this.className = 'hover';
+        // this.className = 'hover';
         return false;
       };
-      rawElement.ondragend = function () {
-        this.className = '';
-        return false;
-      };
+      // rawElement.ondragend = function () {
+      //   // this.className = '';
+      //   return false;
+      // };
       rawElement.ondrop = function (e) {
-        debugger;
         this.className = '';
         e.preventDefault();
 
@@ -40,13 +43,8 @@ angular.module('directives.dragDropFile', [])
           scope.$apply(function() {
             scope.photoUrl = event.target.result;
           });
-          // console.log(event.target);
-          // rawElement.style.background = 'url(' + event.target.result + ') no-repeat center';
         };
-        console.log(file);
         reader.readAsDataURL(file);
-
-        return false;
       };
     }
   };

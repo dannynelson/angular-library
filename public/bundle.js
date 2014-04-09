@@ -16544,6 +16544,34 @@ angular.module("directives.filereadInput", []).directive("fileread", function() 
     };
 });
 
+angular.module("directives.dragDropFile", []).directive("dragDropFile", function() {
+    return {
+        restrict: "A",
+        scope: {
+            dragDropFile: "="
+        },
+        link: function(scope, element, attrs) {
+            var rawElement = element[0];
+            rawElement.ondragover = function() {
+                return false;
+            };
+            rawElement.ondrop = function(e) {
+                this.className = "";
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    debugger;
+                    scope.$apply(function() {
+                        scope.photoUrl = event.target.result;
+                    });
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+    };
+});
+
 angular.module("filters.count", []).filter("count", function() {
     return function(array) {
         return array.length;

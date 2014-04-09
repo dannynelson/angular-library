@@ -13,17 +13,14 @@
 <body ng-controller="MainCtrl">
   <img ng-src="{{photoUrl}}" style="width:100px; height: 100px;"/>
   <div ng-repeat="value in values">{{value}}</div>
-  <div click-file-upload="photoUrl" style="width:100px; height: 100px; background:yellow;"></div>
-  <input type="file" id="directives-click-file-upload"/>
+  <div click-file-upload="photoUrl">
+    <div drag-drop-file="photoUrl" style="width:100px; height: 100px; background:yellow;">
+      {{ nested }}
+    </div>
+  </div>
+
 
   <!-- Angular Templates -->
-<script type="text/ng-template" id="directives.clickFileUpload.html">
-  <input type="file" id="directives-click-file-upload"/>
-</script>
-
-<script type="text/ng-template" id="directives.dragDropFile.html">
-
-</script>
 
 </body>
 </html>

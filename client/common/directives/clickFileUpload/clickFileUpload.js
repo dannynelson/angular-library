@@ -20,9 +20,8 @@ angular.module('directives.clickFileUpload', [])
     scope: {
       clickFileUpload: "="
     },
-    templateUrl: 'directives.clickFileUpload.html',
     link: function (scope, element, attributes) {
-      var $input = element.find('#directives-click-file-upload');
+      var $input = angular.element('<input type="file" id="directives-click-file-upload"/>');
       element.on('click', function(e) {
         $input[0].click();
       });
@@ -35,16 +34,6 @@ angular.module('directives.clickFileUpload', [])
         };
         reader.readAsDataURL(changeEvent.target.files[0]);
       });
-      // element.bind("change", function (changeEvent) {
-      //   var reader = new FileReader();
-      //   reader.onload = function (loadEvent) {
-      //     scope.$apply(function () {
-      //       scope.fileread = loadEvent.target.result;
-      //       scope.newPhoto = true;
-      //     });
-      //   };
-      //   reader.readAsDataURL(changeEvent.target.files[0]);
-      // });
     }
   };
 });

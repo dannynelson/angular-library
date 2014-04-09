@@ -16495,9 +16495,10 @@
     }
 })();
 
-angular.module("app", [ "directives.clickFileUpload" ]).controller("MainCtrl", function($scope) {
+angular.module("app", [ "directives.clickFileUpload", "directives.dragDropFile" ]).controller("MainCtrl", function($scope) {
     $scope.values = [ 1, 2, 3 ];
     $scope.photoUrl = "http://placehold.it/100x100";
+    $scope.nested = "hello";
 });
 
 angular.module("directives.clickFileUpload", []).directive("clickFileUpload", function() {
@@ -16505,9 +16506,8 @@ angular.module("directives.clickFileUpload", []).directive("clickFileUpload", fu
         scope: {
             clickFileUpload: "="
         },
-        templateUrl: "directives.clickFileUpload.html",
         link: function(scope, element, attributes) {
-            var $input = element.find("#directives-click-file-upload");
+            var $input = angular.element('<input type="file" id="directives-click-file-upload"/>');
             element.on("click", function(e) {
                 $input[0].click();
             });
@@ -16540,34 +16540,6 @@ angular.module("directives.filereadInput", []).directive("fileread", function() 
                 };
                 reader.readAsDataURL(changeEvent.target.files[0]);
             });
-        }
-    };
-});
-
-angular.module("directives.dragDropFile", []).directive("dragDropFile", function() {
-    return {
-        restrict: "A",
-        scope: {
-            dragDropFile: "="
-        },
-        link: function(scope, element, attrs) {
-            var rawElement = element[0];
-            rawElement.ondragover = function() {
-                return false;
-            };
-            rawElement.ondrop = function(e) {
-                this.className = "";
-                e.preventDefault();
-                var file = e.dataTransfer.files[0];
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    debugger;
-                    scope.$apply(function() {
-                        scope.photoUrl = event.target.result;
-                    });
-                };
-                reader.readAsDataURL(file);
-            };
         }
     };
 });

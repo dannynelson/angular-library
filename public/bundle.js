@@ -16507,20 +16507,26 @@ angular.module("directives.clickDropFileUpload", []).directive("clickDropFileUpl
             clickDropFileUpload: "="
         },
         link: function(scope, element, attributes) {
+            var rawElement = element[0];
+            var setBackgroundImg = function(dataURI) {
+                rawElement.style.background = "url(" + dataURI + ") no-repeat center";
+                rawElement.style.backgroundSize = "100% 100%";
+            };
             element.on("click", function(e) {
-                var $fileInput = angular.element('<input type="file" id="directives-click-file-upload"/>');
+                var $fileInput = angular.element('<input type="file"/>');
                 $fileInput[0].click();
                 $fileInput.on("change", function(changeEvent) {
                     var reader = new FileReader();
                     reader.onload = function(loadEvent) {
                         scope.$apply(function() {
-                            scope.clickDropFileUpload = loadEvent.target.result;
+                            var dataURI = loadEvent.target.result;
+                            scope.clickDropFileUpload = dataURI;
+                            setBackgroundImg(dataURI);
                         });
                     };
                     reader.readAsDataURL(changeEvent.target.files[0]);
                 });
             });
-            var rawElement = element[0];
             rawElement.ondragover = function() {
                 this.className = "hover";
                 return false;
@@ -16536,7 +16542,9 @@ angular.module("directives.clickDropFileUpload", []).directive("clickDropFileUpl
                 var reader = new FileReader();
                 reader.onload = function(event) {
                     scope.$apply(function() {
-                        scope.clickDropFileUpload = event.target.result;
+                        var dataURI = event.target.result;
+                        scope.clickDropFileUpload = dataURI;
+                        setBackgroundImg(dataURI);
                     });
                 };
                 reader.readAsDataURL(file);
@@ -16551,7 +16559,7 @@ angular.module("directives.clickFileUpload", []).directive("clickFileUpload", fu
             clickFileUpload: "="
         },
         link: function(scope, element, attributes) {
-            var $input = angular.element('<input type="file" id="directives-click-file-upload"/>');
+            var $input = angular.element('<input type="file"/>');
             element.on("click", function(e) {
                 $input[0].click();
             });

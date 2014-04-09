@@ -21,7 +21,7 @@ angular.module('directives.clickFileUpload', [])
       clickFileUpload: "="
     },
     link: function (scope, element, attributes) {
-      var $input = angular.element('<input type="file" id="directives-click-file-upload"/>');
+      var $input = angular.element('<input type="file"/>');
       element.on('click', function(e) {
         $input[0].click();
       });

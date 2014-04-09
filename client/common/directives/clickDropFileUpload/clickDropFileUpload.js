@@ -5,7 +5,8 @@
  *
  * @description
  * Upload a file either by clicking on element, or dragging and dropping file over element
- * - 'hover' class added to element when dragging over it
+ * -  after file upload, file fills the the container as background-image
+ * - 'hover' class added to element when dragging file over it, if you want to add css styles
  *
  * @param {string=} clickDropFileUpload Variable where dataURI (in Base64) is saved once file uploaded.
  *
@@ -22,15 +23,23 @@ angular.module('directives.clickDropFileUpload', [])
       clickDropFileUpload: "="
     },
     link: function (scope, element, attributes) {
+      var rawElement = element[0];
+      var setBackgroundImg = function(dataURI) {
+        rawElement.style.background = 'url('+ dataURI +') no-repeat center';
+        rawElement.style.backgroundSize = '100% 100%';
+      };
       // click upload
+      
       element.on('click', function(e) {
-        var $fileInput = angular.element('<input type="file" id="directives-click-file-upload"/>');
+        var $fileInput = angular.element('<input type="file"/>');
         $fileInput[0].click();
         $fileInput.on('change', function (changeEvent) {
           var reader = new FileReader();
           reader.onload = function (loadEvent) {
             scope.$apply(function () {
-              scope.clickDropFileUpload = loadEvent.target.result;
+              var dataURI = loadEvent.target.result;
+              scope.clickDropFileUpload = dataURI;
+              setBackgroundImg(dataURI);
             });
           };
           reader.readAsDataURL(changeEvent.target.files[0]);
@@ -38,7 +47,6 @@ angular.module('directives.clickDropFileUpload', [])
       });
 
       // drag and drop upload
-      var rawElement = element[0];
       rawElement.ondragover = function () {
         this.className = 'hover';
         return false;
@@ -54,7 +62,9 @@ angular.module('directives.clickDropFileUpload', [])
         var reader = new FileReader();
         reader.onload = function (event) {
           scope.$apply(function() {
-            scope.clickDropFileUpload = event.target.result;
+            var dataURI = event.target.result;
+            scope.clickDropFileUpload = dataURI;
+            setBackgroundImg(dataURI);
           });
         };
         reader.readAsDataURL(file);

@@ -6,7 +6,7 @@
  * @description
  * When element is clicked, trigger a file upload prompt, and save file to given variable
  *
- * @param {string=} clickFileUpload Variable set to dataURI (in Base64) once file uploaded.
+ * @param {string=} clickFileUpload Variable where dataURI (in Base64) is saved once file uploaded.
  *
  * @example
  * $scope.photoUrl = ''; // photo URI will be attached here

@@ -1,6 +1,8 @@
 angular.module('app', [
   'directives.clickFileUpload',
-  'directives.dragDropFile'
+  'directives.dropFileUpload',
+  'directives.clickDropFileUpload',
+
 ])
 
 .controller('MainCtrl', function($scope) {

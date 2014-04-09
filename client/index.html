@@ -13,11 +13,10 @@
 <body ng-controller="MainCtrl">
   <img ng-src="{{photoUrl}}" style="width:100px; height: 100px;"/>
   <div ng-repeat="value in values">{{value}}</div>
-  <div click-file-upload="photoUrl">
-    <div drag-drop-file="photoUrl" style="width:100px; height: 100px; background:yellow;">
-      {{ nested }}
+    <div 
+      click-drop-file-upload="photoUrl"
+      style="width:100px; height: 100px; background:yellow;">
     </div>
-  </div>
 
 
   <!-- Angular Templates -->

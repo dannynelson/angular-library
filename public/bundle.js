@@ -16495,10 +16495,54 @@
     }
 })();
 
-angular.module("app", [ "directives.clickFileUpload", "directives.dragDropFile" ]).controller("MainCtrl", function($scope) {
+angular.module("app", [ "directives.clickFileUpload", "directives.dropFileUpload", "directives.clickDropFileUpload" ]).controller("MainCtrl", function($scope) {
     $scope.values = [ 1, 2, 3 ];
     $scope.photoUrl = "http://placehold.it/100x100";
     $scope.nested = "hello";
+});
+
+angular.module("directives.clickDropFileUpload", []).directive("clickDropFileUpload", function() {
+    return {
+        scope: {
+            clickDropFileUpload: "="
+        },
+        link: function(scope, element, attributes) {
+            element.on("click", function(e) {
+                var $fileInput = angular.element('<input type="file" id="directives-click-file-upload"/>');
+                $fileInput[0].click();
+                $fileInput.on("change", function(changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function(loadEvent) {
+                        scope.$apply(function() {
+                            scope.clickDropFileUpload = loadEvent.target.result;
+                        });
+                    };
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            });
+            var rawElement = element[0];
+            rawElement.ondragover = function() {
+                this.className = "hover";
+                return false;
+            };
+            rawElement.ondragend = function() {
+                this.className = "";
+                return false;
+            };
+            rawElement.ondrop = function(e) {
+                this.className = "";
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    scope.$apply(function() {
+                        scope.clickDropFileUpload = event.target.result;
+                    });
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+    };
 });
 
 angular.module("directives.clickFileUpload", []).directive("clickFileUpload", function() {
@@ -16544,15 +16588,20 @@ angular.module("directives.filereadInput", []).directive("fileread", function() 
     };
 });
 
-angular.module("directives.dragDropFile", []).directive("dragDropFile", function() {
+angular.module("directives.dropFileUpload", []).directive("dropFileUpload", function() {
     return {
         restrict: "A",
         scope: {
-            dragDropFile: "="
+            dropFileUpload: "="
         },
         link: function(scope, element, attrs) {
             var rawElement = element[0];
             rawElement.ondragover = function() {
+                this.className = "hover";
+                return false;
+            };
+            rawElement.ondragend = function() {
+                this.className = "";
                 return false;
             };
             rawElement.ondrop = function(e) {
@@ -16563,7 +16612,7 @@ angular.module("directives.dragDropFile", []).directive("dragDropFile", function
                 reader.onload = function(event) {
                     debugger;
                     scope.$apply(function() {
-                        scope.photoUrl = event.target.result;
+                        scope.dropFileUpload = event.target.result;
                     });
                 };
                 reader.readAsDataURL(file);

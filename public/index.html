@@ -11,15 +11,39 @@
 </head>
 
 <body ng-controller="MainCtrl">
-  <img ng-src="{{photoUrl}}" style="width:100px; height: 100px;"/>
   <div ng-repeat="value in values">{{value}}</div>
-    <div 
+<!--     <div 
       click-drop-file-upload="photoUrl"
       style="width:100px; height: 100px; background:yellow;">
+    </div> -->
+
+<!--   <div
+    click-drop-file-upload="photoUrl"
+    id="directives-image-upload"
+    style="width:200px; height: 200px;">
+    <div class="image-info">
+      <img src="assets/flower-img.png">
+      <div>Drag logo here.</div>
+      <a>or browse to upload...</a>
     </div>
+  </div> -->
+
+  <image-upload
+    photo-url="photoUrl"
+    name="profile photo">
+  </image-upload>
 
 
   <!-- Angular Templates -->
+<script type="text/ng-template" id="directives.imageUpload.html">
+  <div id="directives-image-upload">
+    <div class="image-info">
+      <img ng-src="{{defaultImg || 'assets/flower-img.png' }}">
+      <div>Drag {{ name }} here.</div>
+      <a>or browse to upload...</a>
+    </div>
+  </div>
+</script>
 
 </body>
 </html>

@@ -16495,7 +16495,7 @@
     }
 })();
 
-angular.module("app", [ "directives.clickFileUpload", "directives.dropFileUpload", "directives.clickDropFileUpload" ]).controller("MainCtrl", function($scope) {
+angular.module("app", [ "directives.imageUpload", "directives.clickFileUpload", "directives.dropFileUpload", "directives.clickDropFileUpload" ]).controller("MainCtrl", function($scope) {
     $scope.values = [ 1, 2, 3 ];
     $scope.photoUrl = "http://placehold.it/100x100";
     $scope.nested = "hello";
@@ -16509,8 +16509,10 @@ angular.module("directives.clickDropFileUpload", []).directive("clickDropFileUpl
         link: function(scope, element, attributes) {
             var rawElement = element[0];
             var setBackgroundImg = function(dataURI) {
-                rawElement.style.background = "url(" + dataURI + ") no-repeat center";
-                rawElement.style.backgroundSize = "100% 100%";
+                element.css({
+                    background: "url(" + dataURI + ") no-repeat center",
+                    backgroundSize: "100% 100%"
+                });
             };
             element.on("click", function(e) {
                 var $fileInput = angular.element('<input type="file"/>');
@@ -16621,6 +16623,75 @@ angular.module("directives.dropFileUpload", []).directive("dropFileUpload", func
                     debugger;
                     scope.$apply(function() {
                         scope.dropFileUpload = event.target.result;
+                    });
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+    };
+});
+
+angular.module("directives.imageUpload", []).directive("imageUpload", function() {
+    return {
+        restrict: "E",
+        scope: {
+            photoUrl: "=",
+            name: "@",
+            defaultImg: "@",
+            width: "@",
+            height: "@"
+        },
+        replace: true,
+        templateUrl: "directives.imageUpload.html",
+        link: function(scope, element, attributes) {
+            var rawElement = element[0];
+            scope.name = scope.name || "image";
+            element.css({
+                width: scope.width || "200px",
+                height: scope.height || "200px"
+            });
+            var setBackgroundImg = function(dataURI) {
+                element.css({
+                    background: "url(" + dataURI + ") no-repeat center",
+                    backgroundSize: "100% 100%"
+                });
+                element.find(".image-info").css({
+                    display: "none"
+                });
+            };
+            element.on("click", function(e) {
+                var $fileInput = angular.element('<input type="file"/>');
+                $fileInput[0].click();
+                $fileInput.on("change", function(changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function(loadEvent) {
+                        scope.$apply(function() {
+                            var dataURI = loadEvent.target.result;
+                            scope.photoUrl = dataURI;
+                            setBackgroundImg(dataURI);
+                        });
+                    };
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            });
+            rawElement.ondragover = function() {
+                this.className = "hover";
+                return false;
+            };
+            rawElement.ondragend = function() {
+                this.className = "";
+                return false;
+            };
+            rawElement.ondrop = function(e) {
+                this.className = "";
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    scope.$apply(function() {
+                        var dataURI = event.target.result;
+                        scope.photoUrl = dataURI;
+                        setBackgroundImg(dataURI);
                     });
                 };
                 reader.readAsDataURL(file);

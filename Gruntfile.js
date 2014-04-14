@@ -32,6 +32,14 @@ module.exports = function(grunt) {
       }
     },
 
+    copy: {
+      assets: {
+        files: [
+          {expand: true, cwd: 'client', src: ['assets/**'], dest: '<%= config.dist %>/'},
+        ]
+      }
+    },
+
     // Insert angular templates into index.html
     htmlbuild: {
       templates: {
@@ -197,7 +205,9 @@ module.exports = function(grunt) {
     // less
     'concat:less',
     'less:dev',
-    'clean:less'
+    'clean:less',
+    // assets
+    'copy:assets'
   ]);
 
   grunt.registerTask('build:prod', [

@@ -1,37 +1,66 @@
 /**
  * @ngdoc directive
- * @name clickDropFileUpload
- * @restrict A
+ * @name imageUpload
+ * @restrict E
  *
  * @description
- * Upload a file either by clicking on element, or dragging and dropping file over element
+ * Create a customizable image upload element.
+ * -  Upload file either by clicking on element, or dragging and dropping file over element
  * -  after file upload, file fills the container as background-image
- * - 'hover' class added to element when dragging file over it, if you want to add css styles
+ * - 'hover' class added to element when dragging file over it
  *
- * @param {string=} clickDropFileUpload Variable where dataURI (in Base64) is saved once file uploaded.
+ * @param {string=} photoUrl Variable where dataURI (in Base64) is saved once file uploaded.
+ * @param {string} [name="image"] Optionally override product name.
+ * @param {string} [defaultImg="assets/flower-img.png"] Optionally override default flower image that displays.
+ * @param {string} [height="200px"] Optionally override height.
+ * @param {string} [width="200px"] Optionally override width.
  *
  * @example
- * $scope.photoUrl = ''; // photo URI will be attached here
- * <div click-drop-file-upload="photoUrl">Upload a File</div>
+ * $scope.photoUrl = ''; // data URI will be attached here
+ * <image-upload
+ *   photo-url="photoUrl"
+ *   name="product logo"
+ *   default-img="assets/another-img.png"
+ *   width="300px"
+ *   height="200px">
+ * </image-upload>
  */
 
-angular.module('directives.clickDropFileUpload', [])
 
-.directive("clickDropFileUpload", function () {
+angular.module('directives.imageUpload', [])
+
+.directive("imageUpload", function () {
   return {
+    restrict: 'E',
     scope: {
-      clickDropFileUpload: "="
+      photoUrl: "=",
+      name: "@",
+      defaultImg: "@",
+      width: "@",
+      height: "@"
     },
+    replace: true,
+    templateUrl: 'directives.imageUpload.html',
     link: function (scope, element, attributes) {
       var rawElement = element[0];
+      scope.name = scope.name || 'image';
+
+      element.css({
+        width: scope.width || '200px',
+        height: scope.height || '200px',
+      });
+
       var setBackgroundImg = function(dataURI) {
         element.css({
           background: 'url('+ dataURI +') no-repeat center',
           backgroundSize: '100% 100%'
         });
+        element.find('.image-info').css({
+          display: 'none'
+        });
       };
+
       // click upload
-      
       element.on('click', function(e) {
         var $fileInput = angular.element('<input type="file"/>');
         $fileInput[0].click();
@@ -40,7 +69,7 @@ angular.module('directives.clickDropFileUpload', [])
           reader.onload = function (loadEvent) {
             scope.$apply(function () {
               var dataURI = loadEvent.target.result;
-              scope.clickDropFileUpload = dataURI;
+              scope.photoUrl = dataURI;
               setBackgroundImg(dataURI);
             });
           };
@@ -65,7 +94,7 @@ angular.module('directives.clickDropFileUpload', [])
         reader.onload = function (event) {
           scope.$apply(function() {
             var dataURI = event.target.result;
-            scope.clickDropFileUpload = dataURI;
+            scope.photoUrl = dataURI;
             setBackgroundImg(dataURI);
           });
         };
